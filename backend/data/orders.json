@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ord-1001",
+    "customerId": "u1",
+    "status": "Delivered",
+    "total": 987,
+    "items": ["Butter Chicken Masala", "Margherita Pizza"],
+    "date": "2026-09-10"
+  },
+  {
+    "id": "ord-1002",
+    "customerId": "u1",
+    "status": "In Transit",
+    "total": 449,
+    "items": ["Paneer Tikka Roll"],
+    "date": "2026-09-11"
+  }
+]

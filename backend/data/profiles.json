@@ -1,0 +1,13 @@
+[
+  {
+    "id": "u1",
+    "name": "Aarav Sharma",
+    "email": "aarav@foodexpress.in",
+    "phone": "+91 98765 43210",
+    "address": "Flat 402, Springdale Apartments, Indiranagar, Bengaluru - 560038",
+    "preferences": {
+      "deliveryMode": "delivery",
+      "dietPreference": "balanced"
+    }
+  }
+]
