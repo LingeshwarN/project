@@ -16,7 +16,7 @@ let inMemoryToken: string | null = null;
 const getAuthToken = async (): Promise<string | null> => {
   try {
     return await AsyncStorage.getItem(TOKEN_KEY);
-  } catch (e) {
+  } catch {
     return inMemoryToken;
   }
 };
@@ -24,7 +24,7 @@ const getAuthToken = async (): Promise<string | null> => {
 const setAuthToken = async (token: string): Promise<void> => {
   try {
     await AsyncStorage.setItem(TOKEN_KEY, token);
-  } catch (e) {
+  } catch {
     inMemoryToken = token;
   }
 };
@@ -32,7 +32,7 @@ const setAuthToken = async (token: string): Promise<void> => {
 const removeAuthToken = async (): Promise<void> => {
   try {
     await AsyncStorage.removeItem(TOKEN_KEY);
-  } catch (e) {
+  } catch {
     inMemoryToken = null;
   }
 };
@@ -48,7 +48,7 @@ interface DecodedToken {
  * Accepts any valid email + password that passes strength requirements.
  * Generates a fake JWT-like token and stores it.
  */
-export const simulateLogin = async (email: string, password: string): Promise<{ success: boolean; token?: string; error?: string }> => {
+export const simulateLogin = async (email: string, _password: string): Promise<{ success: boolean; token?: string; error?: string }> => {
   try {
     // Simulate server delay
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
@@ -109,7 +109,7 @@ export const getStoredToken = async (): Promise<{ email: string } | null> => {
 
     console.log('[AuthService] Valid session found for:', payload.email);
     return { email: payload.email };
-  } catch (error) {
+  } catch {
     // Silencing log error for missing native module to avoid console clutter in prototype
     return inMemoryToken ? { email: 'user@foodexpress.com' } : null;
   }

@@ -21,9 +21,11 @@ interface CheckoutScreenProps {
   onCancel: () => void;
   cartTotal: number;
   cartItems?: CartItem[];
+  couponCode?: string;
+  discountAmount?: number;
 }
 
-export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onPlaceOrder, onCancel, cartTotal, cartItems = [] }) => {
+export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onPlaceOrder, onCancel, cartTotal, cartItems = [], couponCode, discountAmount }) => {
   const [customerName, setCustomerName] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [paymentMode, setPaymentMode] = useState<string | null>(null);
@@ -144,6 +146,12 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({ onPlaceOrder, on
             ) : (
               <Text style={styles.summarySub}>No items in your cart yet.</Text>
             )}
+            {couponCode && discountAmount ? (
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>Coupon Applied ({couponCode})</Text>
+                <Text style={styles.summaryDiscount}>-₹{discountAmount}</Text>
+              </View>
+            ) : null}
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Total Amount to Pay</Text>
               <Text style={styles.summaryValue}>₹{cartTotal}</Text>
@@ -311,6 +319,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '900',
     color: '#FF5200',
+  },
+  summaryDiscount: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#2E7D32',
   },
   summaryItem: {
     flex: 1,

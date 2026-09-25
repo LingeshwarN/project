@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { useCart } from '../context/CartContext';
-import { CartIcon, BackIcon } from '../components/Icons';
+import { BackIcon } from '../components/Icons';
 
 interface Props {
   onBack: () => void;
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const CartSummaryScreen: React.FC<Props> = ({ onBack, onCheckout }) => {
-  const { cartItems, restaurantGroups, updateQuantity, clearCart, grandTotal, deliveryFee, finalTotal, bestCoupon, discountAmount } = useCart();
+  const { cartItems, restaurantGroups, updateQuantity, clearCart, deliveryFee, finalTotal, bestCoupon, discountAmount } = useCart();
 
   const totalItems = cartItems.reduce((s, i) => s + i.quantity, 0);
 
@@ -115,15 +115,21 @@ export const CartSummaryScreen: React.FC<Props> = ({ onBack, onCheckout }) => {
               <Text style={styles.billValue}>₹{group.subtotal}</Text>
             </View>
           ))}
-          <View style={styles.billDivider} />
+<View style={styles.billDivider} />
           <View style={styles.billRow}>
             <Text style={styles.billLabel}>Delivery Fee ({restaurantGroups.length}x)</Text>
-            <Text style={styles.billValue}>₹{restaurantGroups.length * 40}</Text>
+            <Text style={styles.billValue}>₹{deliveryFee}</Text>
           </View>
+          {bestCoupon && discountAmount > 0 && (
+            <View style={styles.billRow}>
+              <Text style={styles.couponLabel}>Coupon Applied ({bestCoupon.code})</Text>
+              <Text style={styles.couponValue}>-₹{discountAmount}</Text>
+            </View>
+          )}
           <View style={styles.billDivider} />
           <View style={styles.billRow}>
             <Text style={styles.totalLabel}>To Pay</Text>
-            <Text style={styles.totalValue}>₹{grandTotal + (restaurantGroups.length * 40)}</Text>
+            <Text style={styles.totalValue}>₹{finalTotal}</Text>
           </View>
         </View>
       </ScrollView>
@@ -131,7 +137,7 @@ export const CartSummaryScreen: React.FC<Props> = ({ onBack, onCheckout }) => {
       {/* Footer */}
       <View style={styles.footer}>
         <View>
-          <Text style={styles.footerPrice}>₹{grandTotal + (restaurantGroups.length * 40)}</Text>
+          <Text style={styles.footerPrice}>₹{finalTotal}</Text>
           <Text style={styles.footerSubText}>incl. delivery & taxes</Text>
         </View>
         <TouchableOpacity style={styles.checkoutBtn} onPress={onCheckout} activeOpacity={0.85}>
@@ -288,10 +294,20 @@ const styles = StyleSheet.create({
     color: '#222',
     fontWeight: '700',
   },
-  billDivider: {
+billDivider: {
     height: 1,
     backgroundColor: '#EEEEEE',
     marginVertical: 12,
+  },
+  couponLabel: {
+    fontSize: 14,
+    color: '#2E7D32',
+    fontWeight: '700',
+  },
+  couponValue: {
+    fontSize: 14,
+    color: '#2E7D32',
+    fontWeight: '800',
   },
   totalLabel: {
     fontSize: 16,

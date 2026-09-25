@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Platform, Alert } from 'react-native';
-import { BackIcon, ProfileIcon } from '../components/Icons';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Alert } from 'react-native';
+import { BackIcon } from '../components/Icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { useCart } from '../context/CartContext';

@@ -10,7 +10,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import { RESTAURANTS, DISHES, Restaurant, Dish } from '../data/mockData';
+import { RESTAURANTS, DISHES, Dish } from '../data/mockData';
 import { useCart } from '../context/CartContext';
 
 const CUISINE_FILTERS = ['All', 'Indian', 'Chinese', 'Italian', 'Fast Food', 'Desserts'];
@@ -23,6 +23,7 @@ const cuisinePalette: Record<string, { bg: string; text: string }> = {
   Desserts:  { bg: '#FFF8E1', text: '#F57F17' },
 };
 
+
 interface Props {
   onAddToCart: (dish: Dish) => void;
   onNavigateToCart: () => void;
@@ -30,7 +31,7 @@ interface Props {
 
 export const RestaurantsScreen: React.FC<Props> = ({ onAddToCart, onNavigateToCart }) => {
   const [selectedCuisine, setSelectedCuisine] = useState<string>('All');
-  const { cartItems, restaurantCount, grandTotal, finalTotal, restaurantGroups } = useCart();
+  const { cartItems, restaurantCount, finalTotal, restaurantGroups } = useCart();
 
   const totalCartItems = cartItems.reduce((s, i) => s + i.quantity, 0);
 
@@ -44,8 +45,6 @@ export const RestaurantsScreen: React.FC<Props> = ({ onAddToCart, onNavigateToCa
       .filter(i => i.dish.restaurantId === restaurantId)
       .reduce((s, i) => s + i.quantity, 0);
   };
-
-  const palette = selectedCuisine !== 'All' ? cuisinePalette[selectedCuisine] : null;
 
   return (
     <SafeAreaView style={styles.container}>

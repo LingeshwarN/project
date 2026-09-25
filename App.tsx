@@ -5,14 +5,14 @@ import { Provider, useDispatch, useSelector } from 'react-redux';
 import { store, RootState } from './src/store';
 import { setUserLogin, clearUserLogin, updateUserProfile } from './src/store/userSlice';
 import { recordPurchase, updateHealthMeter, resetProgress } from './src/store/progressSlice';
-import { reduxAddToCart, reduxClearCart, reduxUpdateQuantity } from './src/store/cartSlice';
+import { reduxAddToCart, reduxClearCart } from './src/store/cartSlice';
 import { NavigationProvider, useNavigation } from './src/navigation/Navigation';
 import { UserProvider, useUser } from './src/context/UserContext';
 import { CartProvider, useCart } from './src/context/CartContext';
 import { getStoredToken, simulateLogout } from './src/utils/authService';
 import { clearSessionStorage, getStoredJson, saveStoredJson, STORAGE_KEYS } from './src/utils/storage';
 import { SplashScreen } from './src/screens/SplashScreen';
-import { WelcomeScreen } from './src/screens/WelcomeScreen';
+
 import { LoginScreen } from './src/screens/LoginScreen';
 import { RegisterScreen } from './src/screens/RegisterScreen';
 import { EditProfileScreen } from './src/screens/EditProfileScreen';
@@ -66,7 +66,7 @@ function AppContent() {
 
   // Context hooks
   const { user, login, logout } = useUser();
-  const { cartItems, addToCart, updateQuantity, clearCart, setSelectedCuisine, setSearchQuery } = useCart();
+  const { cartItems, addToCart, clearCart, setSelectedCuisine, setSearchQuery, finalTotal, discountAmount, bestCoupon } = useCart();
 
   const [isSessionRestored, setIsSessionRestored] = useState(false);
 
@@ -90,6 +90,7 @@ function AppContent() {
       }
     };
     restoreSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -155,28 +156,19 @@ function AppContent() {
     handleAddToCart(simulatedDish);
   };
 
-  const handleUpdateQuantity = (dishId: string, delta: number) => {
-    // Sync to Context and Redux
-    updateQuantity(dishId, delta);
-    dispatch(reduxUpdateQuantity({ dishId, delta }));
-  };
 
-  const handlePlaceOrder = () => {
-    const total = cartItems.reduce((acc, curr) => acc + curr.dish.price * curr.quantity, 0);
-    const toPay = total + 40 + Math.round(total * 0.05);
-    const promoAppliedDiscount = Math.round(total * 0.15); // simulate savings
-
-    // Dispatch details to Redux Progress Slice
-    dispatch(recordPurchase({ spend: toPay, savings: promoAppliedDiscount }));
-
+const handlePlaceOrder = () => {
     const orderItemsSummary = cartItems.map((item) => `${item.dish.name} (x${item.quantity})`).join(', ');
+
+    // Dispatch details to Redux Progress Slice using auto-applied best coupon
+    dispatch(recordPurchase({ spend: finalTotal, savings: discountAmount }));
 
     // Push local notification or list trigger
     const newOrder = {
       id: Math.floor(1000 + Math.random() * 9000).toString(),
       date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
       items: orderItemsSummary,
-      total: toPay,
+      total: finalTotal,
     };
 
     // Store order into context mock list by navigating
@@ -272,12 +264,12 @@ function AppContent() {
             onCheckout={() => navigate('checkout')}
           />
         );
-      case 'checkout':
-        const total = cartItems.reduce((acc, curr) => acc + curr.dish.price * curr.quantity, 0);
-        const toPay = total + 40 + Math.round(total * 0.05) - Math.round(total * 0.15); // Including standard math and promo 15%
+case 'checkout':
         return (
           <CheckoutScreen
-            cartTotal={Math.max(0, toPay)}
+            cartTotal={finalTotal}
+            couponCode={bestCoupon?.code}
+            discountAmount={discountAmount}
             cartItems={cartItems}
             onPlaceOrder={handlePlaceOrder}
             onCancel={goBack}

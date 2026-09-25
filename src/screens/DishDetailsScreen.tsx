@@ -23,7 +23,7 @@ export const DishDetailsScreen: React.FC<DishDetailsScreenProps> = ({ dish, onBa
       rateDish(dish.id, localRating);
       Alert.alert('Gourmet Rating', `Thank you for rating "${dish.name}" ${localRating} stars! ⭐`);
     }
-  }, [localRating]);
+  }, [localRating, dish.id, dish.name, dishRatings, rateDish]);
 
   return (
     <SafeAreaView style={styles.container}>

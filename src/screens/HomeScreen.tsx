@@ -10,7 +10,6 @@ import {
   StatusBar,
   Platform,
   FlatList,
-  Alert,
   ActivityIndicator
 } from 'react-native';
 import { useCart } from '../context/CartContext';
@@ -68,7 +67,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       setLoadedDishes(dishes);
       setAvailableCategories(categories);
       setPromoBanner(banner);
-    } catch (error) {
+    } catch {
       setErrorMessage('Unable to load live dishes right now. Please retry.');
       setLoadedDishes(DISHES);
       setAvailableCategories([...CUISINES]);

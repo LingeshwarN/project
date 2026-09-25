@@ -166,12 +166,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   if (subTotal > 0) {
     COUPONS.forEach(coupon => {
-      if (subTotal >= coupon.minOrderValue) {
-        let discount = 0;
+if (subTotal >= coupon.minOrderValue) {
+          let discount = 0;
         if (coupon.discountType === 'flat') {
           discount = coupon.discountValue;
         } else if (coupon.discountType === 'percent') {
-          discount = (subTotal * coupon.discountValue) / 100;
+          discount = Math.round((subTotal * coupon.discountValue) / 100);
           if (coupon.maxDiscount && discount > coupon.maxDiscount) {
             discount = coupon.maxDiscount;
           }

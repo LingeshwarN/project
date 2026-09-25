@@ -14,7 +14,7 @@ import {
 import { useCart } from '../context/CartContext';
 import { DISHES, CUISINES, Dish } from '../data/mockData';
 import { DishCard } from '../components/DishCard';
-import { SearchIcon, BackIcon } from '../components/Icons';
+import { SearchIcon } from '../components/Icons';
 import { fetchDishAndCategoryData } from '../api/foodApi';
 
 interface MenuScreenProps {
@@ -44,7 +44,7 @@ export const MenuScreen: React.FC<MenuScreenProps> = ({ onSelectDish, onAddToCar
       try {
         const data = await fetchDishAndCategoryData();
         setMenuDishes(data.dishes);
-      } catch (error) {
+      } catch {
         setErrorMessage('Unable to load full menu right now.');
         setMenuDishes(DISHES);
       } finally {

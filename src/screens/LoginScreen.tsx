@@ -54,7 +54,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess, onSkip
       } else {
         Alert.alert('Authentication Failed ❌', result.error || 'Login failed. Please try again.');
       }
-    } catch (error) {
+    } catch {
       Alert.alert('Error ❌', 'An unexpected error occurred during login.');
     } finally {
       setIsLoading(false);

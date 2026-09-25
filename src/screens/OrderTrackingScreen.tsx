@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
-import { BackIcon } from '../components/Icons';
-
 interface OrderTrackingScreenProps {
   hasActiveOrder: boolean;
   onBackToHome: () => void;
